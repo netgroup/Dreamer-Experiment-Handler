@@ -12,6 +12,7 @@ dreamer.Fwc = (function(global) {
     var _termoutput;
     var _cmd;
     var _clipboard;
+    var _cursor;
 
     function Fwc(div, channel) {
         _div = div;
@@ -19,6 +20,7 @@ dreamer.Fwc = (function(global) {
         _termoutput = "terminal-output-" + _channel;
         _cmd = "cmd-" + _channel;
         _clipboard = "clipboard-" + _channel;
+        _cursor = "#cursore";
         initTerminalOutput();
         initPromtLine();
         initWebSocket();
@@ -46,7 +48,7 @@ dreamer.Fwc = (function(global) {
     }
 
     function initPromtLine() {
-        $(_div).append("<div class=\"cmd\" id=\"" + _cmd + "\" style=\"width: 100%; visibility: visible;\"><span class=\"prompt\">&gt;&nbsp;</span><span></span><span class=\"cursor blink\">&nbsp;</span><span></span><textarea class='clipboard' id=\"" + _clipboard + "\" ></textarea></div>");
+        $(_div).append("<div class=\"cmd\" id=\"" + _cmd + "\" style=\"width: 100%; visibility: visible;\"><span class=\"prompt\">&gt;&nbsp;</span><span></span><span id=\"cursore\" class=\"cursor blink\">&nbsp;</span><span></span><textarea class='clipboard' id=\"" + _clipboard + "\" ></textarea></div>");
     }
 
     function initTerminalOutput() {
@@ -68,11 +70,11 @@ dreamer.Fwc = (function(global) {
                 sendCtrC();
             }
             else{
-              var cmd = $("#" + _clipboard).attr("value").replace("\n", "");
+              var cmd = $("#" + _clipboard).val().replace("\n", "");
               if (!isBlank(cmd)) {
                 sendCmd(cmd);
               }
-              $("#" + _clipboard).attr("value", "");
+              $("#" + _clipboard).val("");
             }
             
         });
@@ -89,7 +91,13 @@ dreamer.Fwc = (function(global) {
             console.log("CTRL+Z");
             e.preventDefault();
         });
+        $("#" + _clipboard).blur(function() {
+            console.log("BLURR");
+           toggleCursor(false);
+        });
+
         $(_div).click(function(e) {
+            toggleCursor(true);
             $("#" + _clipboard).focus();
             return false;
         }); 
@@ -97,6 +105,16 @@ dreamer.Fwc = (function(global) {
         
         
     }
+
+    function toggleCursor(selected){
+        if(selected){
+            $(_cursor).addClass("blink");
+        }else{
+            $(_cursor).removeClass('blink');
+        }
+    }
+
+
     function sendCtrC(){
         sendCmd("\\x03", true);
     }
