@@ -72,10 +72,18 @@ var server = app.listen(app.get('port'), function() {
     debug('Express server listening on port ' + server.address().port);
 });
 
+
+
+
 io = io.listen(server, {
     log: true
 });
 console.log("stocazzo");
+
+var MininetCtrl = require('./Control/mininet');
+var p = new MininetCtrl("/tmp/my.json","my",io);
+
+
 io.sockets.on('connection', function(socket) {
     console.log('onConnection');
     sh = spawn("/bin/sh");
