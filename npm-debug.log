@@ -2,12 +2,12 @@
 1 verbose cli [ '/usr/local/bin/node',
 1 verbose cli   '/usr/local/bin/npm',
 1 verbose cli   'install',
-1 verbose cli   '-g',
-1 verbose cli   'indexof' ]
+1 verbose cli   'supervisor',
+1 verbose cli   '-g' ]
 2 info using npm@1.4.28
 3 info using node@v0.10.32
-4 verbose cache add [ 'indexof', null ]
-5 verbose cache add name=undefined spec="indexof" args=["indexof",null]
+4 verbose cache add [ 'supervisor', null ]
+5 verbose cache add name=undefined spec="supervisor" args=["supervisor",null]
 6 verbose parsed url { protocol: null,
 6 verbose parsed url   slashes: null,
 6 verbose parsed url   auth: null,
@@ -17,97 +17,160 @@
 6 verbose parsed url   hash: null,
 6 verbose parsed url   search: null,
 6 verbose parsed url   query: null,
-6 verbose parsed url   pathname: 'indexof',
-6 verbose parsed url   path: 'indexof',
-6 verbose parsed url   href: 'indexof' }
-7 silly lockFile 9effb9f5-indexof indexof
-8 verbose lock indexof /home/user/.npm/9effb9f5-indexof.lock
-9 silly lockFile 9effb9f5-indexof indexof
-10 silly lockFile 9effb9f5-indexof indexof
-11 verbose addNamed [ 'indexof', '' ]
+6 verbose parsed url   pathname: 'supervisor',
+6 verbose parsed url   path: 'supervisor',
+6 verbose parsed url   href: 'supervisor' }
+7 silly lockFile 0f4d09e4-supervisor supervisor
+8 verbose lock supervisor /home/user/.npm/0f4d09e4-supervisor.lock
+9 silly lockFile 0f4d09e4-supervisor supervisor
+10 silly lockFile 0f4d09e4-supervisor supervisor
+11 verbose addNamed [ 'supervisor', '' ]
 12 verbose addNamed [ null, '*' ]
-13 silly lockFile 68dda54d-indexof indexof@
-14 verbose lock indexof@ /home/user/.npm/68dda54d-indexof.lock
-15 silly addNameRange { name: 'indexof', range: '*', hasData: false }
-16 verbose request where is /indexof
+13 silly lockFile b28163ae-supervisor supervisor@
+14 verbose lock supervisor@ /home/user/.npm/b28163ae-supervisor.lock
+15 silly addNameRange { name: 'supervisor', range: '*', hasData: false }
+16 verbose request where is /supervisor
 17 verbose request registry https://registry.npmjs.org/
-18 verbose request id 5d4b0f4d25b7fbc6
-19 verbose url raw /indexof
-20 verbose url resolving [ 'https://registry.npmjs.org/', './indexof' ]
-21 verbose url resolved https://registry.npmjs.org/indexof
-22 verbose request where is https://registry.npmjs.org/indexof
-23 info trying registry request attempt 1 at 11:24:44
-24 http GET https://registry.npmjs.org/indexof
-25 http 200 https://registry.npmjs.org/indexof
+18 verbose request id 276b5cd2e9848265
+19 verbose url raw /supervisor
+20 verbose url resolving [ 'https://registry.npmjs.org/', './supervisor' ]
+21 verbose url resolved https://registry.npmjs.org/supervisor
+22 verbose request where is https://registry.npmjs.org/supervisor
+23 info trying registry request attempt 1 at 12:12:34
+24 http GET https://registry.npmjs.org/supervisor
+25 http 200 https://registry.npmjs.org/supervisor
 26 silly registry.get cb [ 200,
-26 silly registry.get   { date: 'Wed, 05 Nov 2014 10:24:45 GMT',
+26 silly registry.get   { date: 'Sat, 08 Nov 2014 11:12:38 GMT',
 26 silly registry.get     server: 'CouchDB/1.5.0 (Erlang OTP/R14B04)',
-26 silly registry.get     etag: '"7SGR69GCYSGN77UZYOQP7XKUB"',
+26 silly registry.get     etag: '"BGHHHRIW12YTFH9N36N5PNAWX"',
 26 silly registry.get     'content-type': 'application/json',
 26 silly registry.get     'cache-control': 'max-age=60',
-26 silly registry.get     'content-length': '1233',
+26 silly registry.get     'content-length': '45175',
 26 silly registry.get     'accept-ranges': 'bytes',
 26 silly registry.get     via: '1.1 varnish',
-26 silly registry.get     age: '22',
-26 silly registry.get     'x-served-by': 'cache-fra1238-FRA',
-26 silly registry.get     'x-cache': 'HIT',
-26 silly registry.get     'x-cache-hits': '1',
-26 silly registry.get     'x-timer': 'S1415183085.392760,VS0,VE0',
+26 silly registry.get     age: '0',
+26 silly registry.get     'x-served-by': 'cache-ams4128-AMS',
+26 silly registry.get     'x-cache': 'MISS',
+26 silly registry.get     'x-cache-hits': '0',
+26 silly registry.get     'x-timer': 'S1415445158.210517,VS0,VE97',
 26 silly registry.get     vary: 'Accept',
 26 silly registry.get     'keep-alive': 'timeout=10, max=50',
 26 silly registry.get     connection: 'Keep-Alive' } ]
-27 silly addNameRange number 2 { name: 'indexof', range: '*', hasData: true }
-28 silly addNameRange versions [ 'indexof', [ '0.0.1' ] ]
-29 verbose addNamed [ 'indexof', '0.0.1' ]
-30 verbose addNamed [ '0.0.1', '0.0.1' ]
-31 silly lockFile eb104ead-indexof-0-0-1 indexof@0.0.1
-32 verbose lock indexof@0.0.1 /home/user/.npm/eb104ead-indexof-0-0-1.lock
-33 silly lockFile 328b1f08-js-org-indexof-indexof-0-0-1-tgz https://registry.npmjs.org/indexof/-/indexof-0.0.1.tgz
-34 verbose lock https://registry.npmjs.org/indexof/-/indexof-0.0.1.tgz /home/user/.npm/328b1f08-js-org-indexof-indexof-0-0-1-tgz.lock
-35 verbose addRemoteTarball [ 'https://registry.npmjs.org/indexof/-/indexof-0.0.1.tgz',
-35 verbose addRemoteTarball   '82dc336d232b9062179d05ab3293a66059fd435d' ]
-36 info retry fetch attempt 1 at 11:24:44
-37 verbose fetch to= /tmp/npm-19189-M9KiwBqS/registry.npmjs.org/indexof/-/indexof-0.0.1.tgz
-38 http GET https://registry.npmjs.org/indexof/-/indexof-0.0.1.tgz
-39 http 200 https://registry.npmjs.org/indexof/-/indexof-0.0.1.tgz
-40 silly lockFile 328b1f08-js-org-indexof-indexof-0-0-1-tgz https://registry.npmjs.org/indexof/-/indexof-0.0.1.tgz
-41 silly lockFile 328b1f08-js-org-indexof-indexof-0-0-1-tgz https://registry.npmjs.org/indexof/-/indexof-0.0.1.tgz
-42 silly lockFile eb104ead-indexof-0-0-1 indexof@0.0.1
-43 silly lockFile eb104ead-indexof-0-0-1 indexof@0.0.1
-44 silly lockFile 68dda54d-indexof indexof@
-45 silly lockFile 68dda54d-indexof indexof@
-46 silly resolved [ { name: 'indexof',
-46 silly resolved     description: 'Microsoft sucks',
-46 silly resolved     version: '0.0.1',
-46 silly resolved     keywords: [ 'index', 'array', 'indexOf' ],
-46 silly resolved     dependencies: {},
-46 silly resolved     component: { scripts: [Object] },
-46 silly resolved     readme: '\n# indexOf\n\n  Lame indexOf thing, thanks microsoft\n\n## Example\n\n```js\nvar index = require(\'indexof\');\nindex(arr, obj);\n```\n\n## License\n\n  MIT',
-46 silly resolved     _id: 'indexof@0.0.1',
+27 silly addNameRange number 2 { name: 'supervisor', range: '*', hasData: true }
+28 silly addNameRange versions [ 'supervisor',
+28 silly addNameRange   [ '0.0.4',
+28 silly addNameRange     '0.0.5',
+28 silly addNameRange     '0.0.6',
+28 silly addNameRange     '0.1.0',
+28 silly addNameRange     '0.1.1',
+28 silly addNameRange     '0.1.2',
+28 silly addNameRange     '0.1.3',
+28 silly addNameRange     '0.2.0',
+28 silly addNameRange     '0.3.0',
+28 silly addNameRange     '0.3.1',
+28 silly addNameRange     '0.3.2',
+28 silly addNameRange     '0.3.3',
+28 silly addNameRange     '0.3.4',
+28 silly addNameRange     '0.3.5',
+28 silly addNameRange     '0.3.6',
+28 silly addNameRange     '0.4.0',
+28 silly addNameRange     '0.4.1',
+28 silly addNameRange     '0.5.0',
+28 silly addNameRange     '0.5.1',
+28 silly addNameRange     '0.5.2',
+28 silly addNameRange     '0.5.3',
+28 silly addNameRange     '0.5.4',
+28 silly addNameRange     '0.5.5',
+28 silly addNameRange     '0.5.6',
+28 silly addNameRange     '0.5.7',
+28 silly addNameRange     '0.6.0' ] ]
+29 verbose addNamed [ 'supervisor', '0.6.0' ]
+30 verbose addNamed [ '0.6.0', '0.6.0' ]
+31 silly lockFile 0362a428-supervisor-0-6-0 supervisor@0.6.0
+32 verbose lock supervisor@0.6.0 /home/user/.npm/0362a428-supervisor-0-6-0.lock
+33 silly lockFile 3607d2d5--supervisor-supervisor-0-6-0-tgz https://registry.npmjs.org/supervisor/-/supervisor-0.6.0.tgz
+34 verbose lock https://registry.npmjs.org/supervisor/-/supervisor-0.6.0.tgz /home/user/.npm/3607d2d5--supervisor-supervisor-0-6-0-tgz.lock
+35 verbose addRemoteTarball [ 'https://registry.npmjs.org/supervisor/-/supervisor-0.6.0.tgz',
+35 verbose addRemoteTarball   'c8b965be5ae31822685f176df1f178dd5d85c332' ]
+36 info retry fetch attempt 1 at 12:12:35
+37 verbose fetch to= /tmp/npm-25558-bu4i4Mzw/registry.npmjs.org/supervisor/-/supervisor-0.6.0.tgz
+38 http GET https://registry.npmjs.org/supervisor/-/supervisor-0.6.0.tgz
+39 http 200 https://registry.npmjs.org/supervisor/-/supervisor-0.6.0.tgz
+40 silly lockFile 3607d2d5--supervisor-supervisor-0-6-0-tgz https://registry.npmjs.org/supervisor/-/supervisor-0.6.0.tgz
+41 silly lockFile 3607d2d5--supervisor-supervisor-0-6-0-tgz https://registry.npmjs.org/supervisor/-/supervisor-0.6.0.tgz
+42 silly lockFile 0362a428-supervisor-0-6-0 supervisor@0.6.0
+43 silly lockFile 0362a428-supervisor-0-6-0 supervisor@0.6.0
+44 silly lockFile b28163ae-supervisor supervisor@
+45 silly lockFile b28163ae-supervisor supervisor@
+46 silly resolved [ { name: 'supervisor',
+46 silly resolved     version: '0.6.0',
+46 silly resolved     description: 'A supervisor program for running nodejs programs',
+46 silly resolved     author: { name: 'Isaac Z. Schlueter', email: 'i@izs.me' },
+46 silly resolved     contributors:
+46 silly resolved      [ [Object],
+46 silly resolved        [Object],
+46 silly resolved        [Object],
+46 silly resolved        [Object],
+46 silly resolved        [Object],
+46 silly resolved        [Object],
+46 silly resolved        [Object],
+46 silly resolved        [Object],
+46 silly resolved        [Object],
+46 silly resolved        [Object],
+46 silly resolved        [Object],
+46 silly resolved        [Object],
+46 silly resolved        [Object],
+46 silly resolved        [Object],
+46 silly resolved        [Object],
+46 silly resolved        [Object],
+46 silly resolved        [Object],
+46 silly resolved        [Object],
+46 silly resolved        [Object],
+46 silly resolved        [Object],
+46 silly resolved        [Object],
+46 silly resolved        [Object],
+46 silly resolved        [Object],
+46 silly resolved        [Object],
+46 silly resolved        [Object],
+46 silly resolved        [Object] ],
+46 silly resolved     repository:
+46 silly resolved      { type: 'git',
+46 silly resolved        url: 'git://github.com/isaacs/node-supervisor.git' },
+46 silly resolved     bugs: { url: 'https://github.com/isaacs/node-supervisor/issues' },
+46 silly resolved     homepage: 'https://github.com/isaacs/node-supervisor/',
+46 silly resolved     main: 'lib/supervisor.js',
+46 silly resolved     bin:
+46 silly resolved      { 'node-supervisor': 'lib/cli-wrapper.js',
+46 silly resolved        supervisor: 'lib/cli-wrapper.js' },
+46 silly resolved     engines: { node: '>=0.6.0' },
+46 silly resolved     preferGlobal: true,
+46 silly resolved     _id: 'supervisor@0.6.0',
 46 silly resolved     dist:
-46 silly resolved      { shasum: '82dc336d232b9062179d05ab3293a66059fd435d',
-46 silly resolved        tarball: 'http://registry.npmjs.org/indexof/-/indexof-0.0.1.tgz' },
+46 silly resolved      { shasum: 'c8b965be5ae31822685f176df1f178dd5d85c332',
+46 silly resolved        tarball: 'http://registry.npmjs.org/supervisor/-/supervisor-0.6.0.tgz' },
+46 silly resolved     _from: 'supervisor@',
+46 silly resolved     _npmVersion: '1.4.3',
+46 silly resolved     _npmUser: { name: 'iangreenleaf', email: 'ian.greenleaf@gmail.com' },
 46 silly resolved     maintainers: [ [Object] ],
 46 silly resolved     directories: {},
-46 silly resolved     _shasum: '82dc336d232b9062179d05ab3293a66059fd435d',
-46 silly resolved     _from: 'indexof@',
-46 silly resolved     _resolved: 'https://registry.npmjs.org/indexof/-/indexof-0.0.1.tgz' } ]
-47 info install indexof@0.0.1 into /usr/local/lib
-48 info installOne indexof@0.0.1
-49 verbose lib/node_modules/indexof unbuild
-50 verbose tar unpack /home/user/.npm/indexof/0.0.1/package.tgz
-51 silly lockFile 8019a0da-r-local-lib-node-modules-indexof tar:///usr/local/lib/node_modules/indexof
-52 verbose lock tar:///usr/local/lib/node_modules/indexof /home/user/.npm/8019a0da-r-local-lib-node-modules-indexof.lock
-53 silly lockFile 68f25af9-er-npm-indexof-0-0-1-package-tgz tar:///home/user/.npm/indexof/0.0.1/package.tgz
-54 verbose lock tar:///home/user/.npm/indexof/0.0.1/package.tgz /home/user/.npm/68f25af9-er-npm-indexof-0-0-1-package-tgz.lock
+46 silly resolved     _shasum: 'c8b965be5ae31822685f176df1f178dd5d85c332',
+46 silly resolved     _resolved: 'https://registry.npmjs.org/supervisor/-/supervisor-0.6.0.tgz' } ]
+47 info install supervisor@0.6.0 into /usr/local/lib
+48 info installOne supervisor@0.6.0
+49 verbose lib/node_modules/supervisor unbuild
+50 verbose tar unpack /home/user/.npm/supervisor/0.6.0/package.tgz
+51 silly lockFile 108aea87-ocal-lib-node-modules-supervisor tar:///usr/local/lib/node_modules/supervisor
+52 verbose lock tar:///usr/local/lib/node_modules/supervisor /home/user/.npm/108aea87-ocal-lib-node-modules-supervisor.lock
+53 silly lockFile 7e5514dd-npm-supervisor-0-6-0-package-tgz tar:///home/user/.npm/supervisor/0.6.0/package.tgz
+54 verbose lock tar:///home/user/.npm/supervisor/0.6.0/package.tgz /home/user/.npm/7e5514dd-npm-supervisor-0-6-0-package-tgz.lock
 55 silly gunzTarPerm modes [ '775', '664' ]
-56 error Error: EACCES, mkdir '/usr/local/lib/node_modules/indexof'
-56 error  { [Error: EACCES, mkdir '/usr/local/lib/node_modules/indexof']
+56 error Error: EACCES, mkdir '/usr/local/lib/node_modules/supervisor'
+56 error  { [Error: EACCES, mkdir '/usr/local/lib/node_modules/supervisor']
 56 error   errno: 3,
 56 error   code: 'EACCES',
-56 error   path: '/usr/local/lib/node_modules/indexof',
+56 error   path: '/usr/local/lib/node_modules/supervisor',
 56 error   fstream_type: 'Directory',
-56 error   fstream_path: '/usr/local/lib/node_modules/indexof',
+56 error   fstream_path: '/usr/local/lib/node_modules/supervisor',
 56 error   fstream_class: 'DirWriter',
 56 error   fstream_stack:
 56 error    [ '/usr/local/lib/node_modules/npm/node_modules/fstream/lib/dir-writer.js:36:23',
@@ -115,17 +178,17 @@
 56 error      'Object.oncomplete (fs.js:107:15)' ] }
 57 error Please try running this command again as root/Administrator.
 58 error System Linux 3.8.0-35-generic
-59 error command "/usr/local/bin/node" "/usr/local/bin/npm" "install" "-g" "indexof"
+59 error command "/usr/local/bin/node" "/usr/local/bin/npm" "install" "supervisor" "-g"
 60 error cwd /home/user/dreamer-server-nodejs
 61 error node -v v0.10.32
 62 error npm -v 1.4.28
-63 error path /usr/local/lib/node_modules/indexof
-64 error fstream_path /usr/local/lib/node_modules/indexof
+63 error path /usr/local/lib/node_modules/supervisor
+64 error fstream_path /usr/local/lib/node_modules/supervisor
 65 error fstream_type Directory
 66 error fstream_class DirWriter
 67 error code EACCES
 68 error errno 3
-69 error stack Error: EACCES, mkdir '/usr/local/lib/node_modules/indexof'
+69 error stack Error: EACCES, mkdir '/usr/local/lib/node_modules/supervisor'
 70 error fstream_stack /usr/local/lib/node_modules/npm/node_modules/fstream/lib/dir-writer.js:36:23
 70 error fstream_stack /usr/local/lib/node_modules/npm/node_modules/mkdirp/index.js:46:53
 70 error fstream_stack Object.oncomplete (fs.js:107:15)
