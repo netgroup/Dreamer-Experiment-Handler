@@ -13,6 +13,13 @@ var routes = require('./routes/index');
 
 var app = express();
 
+
+
+
+var explist = [];
+
+exports.explist = explist;
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -73,17 +80,17 @@ var server = app.listen(app.get('port'), function() {
 });
 
 
-
-
 io = io.listen(server, {
     log: true
 });
+exports.io = io;
+
+
 console.log("stocazzo");
 
-var MininetCtrl = require('./Control/mininet');
-var p = new MininetCtrl("/tmp/my.json","my",io);
-//p.provaSshClient("pwd");
-//p.sendData();
+
+
+// //p.sendData();
 // io.sockets.on('connection', function(socket) {
 //     console.log('onConnection');
 //     sh = spawn("/bin/sh");

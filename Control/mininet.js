@@ -17,11 +17,11 @@ dreamer.MininetCtrl = (function (global){
     MininetCtrl.prototype = new TestBedCtrl;
     MininetCtrl.prototype.constructor = MininetCtrl;
     MininetCtrl.prototype.parent = TestBedCtrl.prototype;
-
+    /*
   	MininetCtrl.prototype.deploy= function(){
       this.parent.deploy.call();
 
-  	};
+  	};*/
 
 
 

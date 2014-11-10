@@ -2,11 +2,18 @@ if (typeof dreamer === 'undefined') {
   var dreamer = {};
 }
 var Util = require('../routes/util');
+
 dreamer.TestBedCtrl = (function (global){
   'use strict';
 
 	var myUtil = new Util();
   	var spawn = require('child_process').spawn;
+  	var clientsp = {};
+  	var clientws = [];
+  	var sshclients = [];
+  	var sh;
+  	var depSocket;
+  	//var self = this;
 
 
   	function TestBedCtrl(topopath, expname, io){
@@ -14,6 +21,7 @@ dreamer.TestBedCtrl = (function (global){
   		if(topopath != undefined){
 	  		this.expname = expname;
 	  		this.ns = io.of('/'+expname);
+	  		setupWebSocketListener(this);
 	  		var self = this;
 	  		myUtil.impJsonFromFile(topopath,function(data){
 	  			if(!data.error){
@@ -25,43 +33,108 @@ dreamer.TestBedCtrl = (function (global){
 	  		});
 
 
-	  		setupWebSocketListener(this);
+	  		
   		}
   	}
 
   	function setupWebSocketListener(self){
   		self.ns.on('connection', function(socket){
   			console.log('someone connected');
+		    socket.on('startDeploy', function(data) {
+		        console.log('startDeploy: ' + data);
+
+		    });
+
+		   	socket.on('new-node-shell', function(data) {
+		   		var nodeid = data.nodeid;
+		        if(nodeid != undefined){
+		        //if(data != undefined){
+		        	socket.join(data);
+
+	        	    socket.on('disconnect', function(data) {
+				        console.log('disconnesso: onDisconnect');
+				    });
+		        	//var nodeid = 2;
+		        	
+		        	if(sshclients[nodeid] == undefined){
+		        		var SshClient = require('./sshClient');
+    					var sshClient = new SshClient("root", "root", "10.0.0.2"); //TODO  dati da prelevare clientsp
+    					sshclients[nodeid] = sshClient;
+    					clientws[nodeid] = socket;
+    					sshClient.on("data", function(data){
+    						clientws[nodeid].emit('cmd_res', data);
+    					});
+
+    					clientws[nodeid].on("cmd", function(data){
+    						console.log("sottocanale cmd");
+    						sshClient.sendData(data);
+		        		});
+
+    					sshClient.connect(); 
+		        	}
+		        }
+
+		    });
+
+		   	
+		    socket.on('cmd', function(data) {
+
+				if(data =="deploy"){
+			  		console.log("DEPLOY");
+			  		sh = spawn("/bin/sh");
+			  		console.log(socket);
+			  		//var selfie = this;
+
+				    //sh.stdout.setEncoding('utf-8');
+				    //sh.stdin.setEncoding('utf-8');
+				    sh.stdout.on('data', function(data) {
+				        console.log('data-deploy: ' + data)
+				        socket.emit('cmd_res', data);
+				    });
+				    sh.stderr.setEncoding('utf-8');
+				    sh.stderr.on('data', function(data) {
+				        console.log('dataerr-deploy: ' + data)
+				        socket.emit('cmd_res', data);
+				    });
+
+				    sh.stdin.write("sudo python sshdtest.py"+ "\n");
+				}
+				else if(sh != undefined){
+					if(data == "Ctrl-C"){
+						console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+						//sh.kill('SIGINT');
+						sh.stdin.write("\x03");
+					}
+					else
+						sh.stdin.write(data+ "\n");
+				}
+		    });
+
 		});
   	};
 
-  	TestBedCtrl.prototype.deploy= function(){
+  	/*TestBedCtrl.prototype.deploy= function(self){
   		console.log("DEPLOY");
-  		var sh = spawn("/bin/sh");
-  		console.log(sh.connected);
+  		sh = spawn("/bin/sh");
+  		console.log(self.depSocket);
+  		//var selfie = this;
+
 	    sh.stdout.setEncoding('utf-8');
 	    sh.stdin.setEncoding('utf-8');
 	    sh.stdout.on('data', function(data) {
 	        console.log('data-deploy: ' + data)
-	        //socket.emit('cmd_res', data);
+	        this.depSocket.emit('cmd_res', data);
 	    });
 	    sh.stderr.setEncoding('utf-8');
 	    sh.stderr.on('data', function(data) {
 	        console.log('dataerr-deploy: ' + data)
-	        //socket.emit('cmd_res', data);
+	        this.depSocket.emit('cmd_res', data);
 	    });
 
-	    sh.stdin.write("ls"+ "\n");
+	    sh.stdin.write("sudo python sshdtest.py"+ "\n");
 
-  	};
+  	};*/
 
-  	TestBedCtrl.prototype.provaSshClient = function(data){
-  		var SshClient = require('./sshClient');
-    	var sshClient = new SshClient("root", "root", "10.0.0.2");
-    	sshClient.connect();
-    	//sshClient.sendData(data);
-    
-  	}
 
   	TestBedCtrl.prototype.sendData = function(data){
   		console.log('sendData: '+ data);
