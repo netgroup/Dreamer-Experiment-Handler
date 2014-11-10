@@ -82,39 +82,39 @@ console.log("stocazzo");
 
 var MininetCtrl = require('./Control/mininet');
 var p = new MininetCtrl("/tmp/my.json","my",io);
+//p.provaSshClient("pwd");
+//p.sendData();
+// io.sockets.on('connection', function(socket) {
+//     console.log('onConnection');
+//     sh = spawn("/bin/sh");
+//     console.log(sh.connected);
+//     sh.stdout.setEncoding('utf-8');
+//     sh.stdin.setEncoding('utf-8');
+//     sh.stdout.on('data', function(data) {
+//         console.log('data ' + data)
+//         socket.emit('cmd_res', data);
+//     });
+//     sh.stderr.setEncoding('utf-8');
+//     sh.stderr.on('data', function(data) {
+//         console.log('dataerr ' + data)
+//         socket.emit('cmd_res', data);
+//     });
+//     console.log(sh.connected);
+
+//     socket.on('disconnect', function(data) {
+//         console.log('disconnesso: onDisconnect');
+//     });
 
 
-io.sockets.on('connection', function(socket) {
-    console.log('onConnection');
-    sh = spawn("/bin/sh");
-    console.log(sh.connected);
-    sh.stdout.setEncoding('utf-8');
-    sh.stdin.setEncoding('utf-8');
-    sh.stdout.on('data', function(data) {
-        console.log('data ' + data)
-        socket.emit('cmd_res', data);
-    });
-    sh.stderr.setEncoding('utf-8');
-    sh.stderr.on('data', function(data) {
-        console.log('dataerr ' + data)
-        socket.emit('cmd_res', data);
-    });
-    console.log(sh.connected);
+//     socket.on('cmd', function(data) {
+//         console.log('cmd: ' + data);
+//         console.log(sh.connected);
+//         sh.stdin.write(data + "\n");
 
-    socket.on('disconnect', function(data) {
-        console.log('disconnesso: onDisconnect');
-    });
+//     });
 
 
-    socket.on('cmd', function(data) {
-        console.log('cmd: ' + data);
-        console.log(sh.connected);
-        sh.stdin.write(data + "\n");
-
-    });
-
-
-});
+// });
 
 
 

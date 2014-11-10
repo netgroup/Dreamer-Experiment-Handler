@@ -8,8 +8,6 @@ dreamer.MininetCtrl = (function (global){
     var TestBedCtrl = require('./tbcontroller');
     
     
-
-
   	function MininetCtrl(topopath, expname, io){
       console.log("topopath " + topopath);
       TestBedCtrl.call(this,topopath, expname, io);
@@ -20,8 +18,8 @@ dreamer.MininetCtrl = (function (global){
     MininetCtrl.prototype.constructor = MininetCtrl;
     MininetCtrl.prototype.parent = TestBedCtrl.prototype;
 
-  	MininetCtrl.prototype.deploy= function(a, b, callback){
-
+  	MininetCtrl.prototype.deploy= function(){
+      this.parent.deploy.call();
 
   	};
 

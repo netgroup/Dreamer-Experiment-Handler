@@ -4,8 +4,10 @@ if (typeof dreamer === 'undefined') {
 var Util = require('../routes/util');
 dreamer.TestBedCtrl = (function (global){
   'use strict';
-var myUtil = new Util();
-  	
+
+	var myUtil = new Util();
+  	var spawn = require('child_process').spawn;
+
 
   	function TestBedCtrl(topopath, expname, io){
   		console.log("TestBedCtrl exp: " + expname);
@@ -21,17 +23,49 @@ var myUtil = new Util();
 	  				self.topology = {};
 	  			}
 	  		});
-  		}
 
+
+	  		setupWebSocketListener(this);
+  		}
   	}
 
-  	TestBedCtrl.prototype.deploy= function(a, b, callback){
+  	function setupWebSocketListener(self){
+  		self.ns.on('connection', function(socket){
+  			console.log('someone connected');
+		});
+  	};
 
+  	TestBedCtrl.prototype.deploy= function(){
+  		console.log("DEPLOY");
+  		var sh = spawn("/bin/sh");
+  		console.log(sh.connected);
+	    sh.stdout.setEncoding('utf-8');
+	    sh.stdin.setEncoding('utf-8');
+	    sh.stdout.on('data', function(data) {
+	        console.log('data-deploy: ' + data)
+	        //socket.emit('cmd_res', data);
+	    });
+	    sh.stderr.setEncoding('utf-8');
+	    sh.stderr.on('data', function(data) {
+	        console.log('dataerr-deploy: ' + data)
+	        //socket.emit('cmd_res', data);
+	    });
+
+	    sh.stdin.write("ls"+ "\n");
 
   	};
 
+  	TestBedCtrl.prototype.provaSshClient = function(data){
+  		var SshClient = require('./sshClient');
+    	var sshClient = new SshClient("root", "root", "10.0.0.2");
+    	sshClient.connect();
+    	//sshClient.sendData(data);
+    
+  	}
+
   	TestBedCtrl.prototype.sendData = function(data){
   		console.log('sendData: '+ data);
+
   	};
 
   	TestBedCtrl.prototype.rcvData = function(data){
