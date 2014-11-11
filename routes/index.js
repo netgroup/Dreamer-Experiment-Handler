@@ -24,8 +24,8 @@ router.post('/newExp', function(req, res) {
 			console.log("@@@@ size: "+App.explist.length);
 			App.explist.push(p);
 			//p.provaSshClient("pwd");
-
-			res.status(200).send(response);
+			res.status(200).send("");
+			//res.send({'error':'no auth'},200);
 		});
 	};
 	

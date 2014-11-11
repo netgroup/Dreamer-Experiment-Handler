@@ -86,7 +86,7 @@ io = io.listen(server, {
 exports.io = io;
 
 
-console.log("stocazzo");
+console.log("avviato");
 
 
 

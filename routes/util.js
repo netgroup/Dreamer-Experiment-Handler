@@ -30,9 +30,9 @@ dreamer.Util = (function (global){
 	  			callback({error: {message:err}});
 	  		}
 	  		else{
-	  			console.log(data);
+	  			//console.log(data);
 	  			var jsondata = JSON.parse(data);
-	  			
+
 	  			callback({data:jsondata});
 	  		}
 	  	});

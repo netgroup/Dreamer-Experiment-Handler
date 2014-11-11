@@ -13,11 +13,13 @@ dreamer.TestBedCtrl = (function (global){
   	var sshclients = [];
   	var sh;
   	var depSocket;
+  	
   	//var self = this;
 
 
   	function TestBedCtrl(topopath, expname, io){
   		console.log("TestBedCtrl exp: " + expname);
+  		this.topology = "wer";
   		if(topopath != undefined){
 	  		this.expname = expname;
 	  		this.ns = io.of('/'+expname);
@@ -25,17 +27,28 @@ dreamer.TestBedCtrl = (function (global){
 	  		var self = this;
 	  		myUtil.impJsonFromFile(topopath,function(data){
 	  			if(!data.error){
-	  				self.topology = data.data.topology;
+
+	  				self.topology = data.data;
+
 	  			}
 	  			else{
 	  				self.topology = {};
 	  			}
+
+	  			self.setupNodeProp();
 	  		});
-
-
-	  		
+  		
+  			
   		}
+
+
   	}
+
+  	TestBedCtrl.prototype.setupNodeProp = function(){
+  		for(var n in this.topology.vertices){
+  			clientsp[n] = { username : "root", psw: "root"};
+  		}
+  	};
 
   	function setupWebSocketListener(self){
   		self.ns.on('connection', function(socket){
@@ -58,7 +71,8 @@ dreamer.TestBedCtrl = (function (global){
 		        	
 		        	if(sshclients[nodeid] == undefined){
 		        		var SshClient = require('./sshClient');
-    					var sshClient = new SshClient("root", "root", "10.0.0.2"); //TODO  dati da prelevare clientsp
+		        		var nodep = clientsp[nodeid];
+    					var sshClient = new SshClient(nodep.username, nodep.psw, nodep.address); //TODO  dati da prelevare clientsp
     					sshclients[nodeid] = sshClient;
     					clientws[nodeid] = socket;
     					sshClient.on("data", function(data){
@@ -85,10 +99,14 @@ dreamer.TestBedCtrl = (function (global){
 			  		console.log(socket);
 			  		//var selfie = this;
 
-				    //sh.stdout.setEncoding('utf-8');
-				    //sh.stdin.setEncoding('utf-8');
+				    sh.stdout.setEncoding('utf-8');
+				    sh.stdin.setEncoding('utf-8');
 				    sh.stdout.on('data', function(data) {
 				        console.log('data-deploy: ' + data)
+				        if(data.indexOf("nodeaddr") == 0){
+				        	var spli = data.split(" ");
+				        	clientsp[spli[1]] = spli[2];
+				        }
 				        socket.emit('cmd_res', data);
 				    });
 				    sh.stderr.setEncoding('utf-8');
@@ -97,7 +115,8 @@ dreamer.TestBedCtrl = (function (global){
 				        socket.emit('cmd_res', data);
 				    });
 
-				    sh.stdin.write("sudo python sshdtest.py"+ "\n");
+				    sh.stdin.write("sudo python test/sshdtest.py"+ "\n");
+
 				}
 				else if(sh != undefined){
 					if(data == "Ctrl-C"){
