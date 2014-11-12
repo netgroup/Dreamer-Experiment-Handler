@@ -52,83 +52,118 @@ dreamer.TestBedCtrl = (function (global){
 
   	function setupWebSocketListener(self){
   		self.ns.on('connection', function(socket){
-  			console.log('someone connected');
-		    socket.on('startDeploy', function(data) {
-		        console.log('startDeploy: ' + data);
+  			console.log("Socket.io Event: connected " + socket.id);
 
+  			socket.on('new-deploy-shell', function(data) {
+		        console.log('new-deploy-shell');
+		        
+		        var nodeid = data.nodeid;
+		        if(nodeid != undefined){
+		        	clientws[nodeid] = socket;
+		        	sh = spawn("/bin/sh");
+		        	sh.stdout.setEncoding('utf-8');
+				    sh.stdin.setEncoding('utf-8');
+		        	socket.join(nodeid)
+		        		.emit("cmd_res", "deployment shell allowed!")
+		        		.on('disconnect', function(data) {
+				        	console.log('disconnesso ' + nodeid);
+				    	})
+				    	.on('cmd', function(data){
+				    		console.log('deployment cmd ' + data.cmd);
+				    		if( data.cmd == "deploy")
+				    			sh.stdin.write("sudo python test/sshdtest.py"+ "\n");
+				    		else
+				    			sh.stdin.write(data.cmd+ "\n");
+				    	});
+		        	sh.stdout.on('data', function(data) {
+				        console.log('deploy: ' + data)
+				        if(data.indexOf("nodeaddr") == 0){
+				        	var spli = data.split(" ");
+				        	clientsp[spli[1]] = spli[2];
+				        }
+				        clientws[nodeid].emit('cmd_res', data);
+				    });
+				    sh.stderr.setEncoding('utf-8');
+				    sh.stderr.on('data', function(data) {
+				        console.log('dataerr-deploy: ' + data)
+				        clientws[nodeid].emit('cmd_res', data);
+				    });
+		        }
 		    });
+
+  			
+  
 
 		   	socket.on('new-node-shell', function(data) {
 		   		var nodeid = data.nodeid;
 		        if(nodeid != undefined){
 		        //if(data != undefined){
-		        	socket.join(data);
-
-	        	    socket.on('disconnect', function(data) {
-				        console.log('disconnesso: onDisconnect');
-				    });
-		        	//var nodeid = 2;
-		        	
-		        	if(sshclients[nodeid] == undefined){
-		        		var SshClient = require('./sshClient');
-		        		var nodep = clientsp[nodeid];
-    					var sshClient = new SshClient(nodep.username, nodep.psw, nodep.address); //TODO  dati da prelevare clientsp
-    					sshclients[nodeid] = sshClient;
-    					clientws[nodeid] = socket;
-    					sshClient.on("data", function(data){
-    						clientws[nodeid].emit('cmd_res', data);
-    					});
-
-    					clientws[nodeid].on("cmd", function(data){
-    						console.log("sottocanale cmd");
-    						sshClient.sendData(data);
+		        	var SshClient = require('./sshClient');
+	        		var nodep = clientsp[nodeid];
+					var sshClient = new SshClient("root", "root", "10.0.0.2"); //TODO  dati da prelevare clientsp
+					sshclients[nodeid] = sshClient;
+					clientws[nodeid] = socket;
+		        	socket.join(nodeid)
+		        		.emit("cmd_res", "bravo join fatto!")
+						.on('disconnect', function(data) {
+				        	console.log('disconnesso ' + nodeid);
+				    	})
+				    	.on("cmd", function(data){
+    						console.log("room cmd: " + data.cmd);
+    						sshClient.sendData(data.cmd);
 		        		});
 
+    					sshClient.on("data", function(data){
+							console.log("sshclient data from: " + nodeid);
+    						socket.emit('cmd_res', data);
+    					});
     					sshClient.connect(); 
-		        	}
+		        	
 		        }
 
 		    });
 
-		   	
+		   	/*
 		    socket.on('cmd', function(data) {
-
-				if(data =="deploy"){
+		    	console.log("non room command");
+				if(data.nodeid =="deployment" && data.cmd == "deploy"){
 			  		console.log("DEPLOY");
 			  		sh = spawn("/bin/sh");
-			  		console.log(socket);
+			  		//console.log(socket);
 			  		//var selfie = this;
 
 				    sh.stdout.setEncoding('utf-8');
 				    sh.stdin.setEncoding('utf-8');
 				    sh.stdout.on('data', function(data) {
-				        console.log('data-deploy: ' + data)
+				        console.log('deploy: ' + data)
 				        if(data.indexOf("nodeaddr") == 0){
 				        	var spli = data.split(" ");
 				        	clientsp[spli[1]] = spli[2];
 				        }
-				        socket.emit('cmd_res', data);
+				        socket.to("deployment").emit('cmd_res', data);
 				    });
 				    sh.stderr.setEncoding('utf-8');
 				    sh.stderr.on('data', function(data) {
 				        console.log('dataerr-deploy: ' + data)
-				        socket.emit('cmd_res', data);
+				        socket.to("deployment").emit('cmd_res', data);
 				    });
 
 				    sh.stdin.write("sudo python test/sshdtest.py"+ "\n");
 
 				}
 				else if(sh != undefined){
-					if(data == "Ctrl-C"){
+					if(data.cmd == "Ctrl-C"){
 						console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 						//sh.kill('SIGINT');
 						sh.stdin.write("\x03");
 					}
-					else
-						sh.stdin.write(data+ "\n");
+					else {
+						if(data.nodeid == "deployment")
+							sh.stdin.write(data.cmd+ "\n");
+					}
 				}
 		    });
-
+			*/
 		});
   	};
 

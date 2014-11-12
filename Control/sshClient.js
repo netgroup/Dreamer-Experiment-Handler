@@ -40,7 +40,7 @@ dreamer.SshClient = (function (global){
       self.ssh.stdout.setEncoding('utf-8');
       
       self.ssh.stdout.on('data', function(data) {
-            console.log("data-ssh: " + data);
+           // console.log("data-ssh: " + data);
             if (self.connected) {
                 return self.emit('data',data);
             }
@@ -66,7 +66,7 @@ dreamer.SshClient = (function (global){
       });
       self.ssh.stderr.setEncoding('utf-8');
       self.ssh.stderr.on('data', function(data) {
-        console.log('dataerr ' + data)
+        console.log('ssh dataerr ' + data)
         self.emit('dataerr', data);
       });
       
