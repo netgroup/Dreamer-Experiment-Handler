@@ -23,11 +23,13 @@ dreamer.SshClient = (function (global){
 
   	SshClient.prototype.connect= function(){
       this.ssh = spawn('sshpass', ['-p' ,this.password, 'ssh', '-tt' ,this.username+'@'+this.address]);
+      this.ssh.stdin.setEncoding('utf-8');
+      this.ssh.stdout.setEncoding('utf-8');
       initListeners(this);
   	};
 
     SshClient.prototype.sendData= function(data){
-      this.ssh.stdin.setEncoding('utf-8');
+      
       this.ssh.stdin.write(data + "\n");
     };
 
@@ -37,19 +39,17 @@ dreamer.SshClient = (function (global){
     };
 
     function initListeners(self){
-      self.ssh.stdout.setEncoding('utf-8');
+      
       
       self.ssh.stdout.on('data', function(data) {
-           // console.log("data-ssh: " + data);
+
             if (self.connected) {
                 return self.emit('data',data);
             }
             if (data.toString().match("root@")) { 
                 self.connected=true;
                 self.emit('connected',self.address);
-                //console.log("data-ssh: "+data);
-                self.sendData("cd /home");
-                self.sendData("pwd");
+
                 return self.emit('data',data);
             }
             

@@ -115,9 +115,10 @@ dreamer.TestBedCtrl = (function (global){
 
     					sshClient.on("data", function(data){
 							console.log("sshclient data from: " + nodeid);
+							console.log(data);
     						socket.emit('cmd_res', data);
     					});
-    					sshClient.connect(); 
+    				sshClient.connect(); 
 		        	
 		        }
 
