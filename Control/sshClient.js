@@ -22,7 +22,7 @@ dreamer.SshClient = (function (global){
 
 
   	SshClient.prototype.connect= function(){
-      this.ssh = spawn('sshpass', ['-p' ,this.password, 'ssh', '-tt' ,this.username+'@'+this.address]);
+      this.ssh = spawn('sshpass', ['-p' ,this.password, 'ssh', '-tt' , '-o' ,"StrictHostKeyChecking no" , this.username+'@'+this.address]);
       this.ssh.stdin.setEncoding('utf-8');
       this.ssh.stdout.setEncoding('utf-8');
       initListeners(this);

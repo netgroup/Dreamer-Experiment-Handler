@@ -20,7 +20,7 @@ router.post('/newExp', function(req, res) {
 
 			var MininetCtrl = require('../Control/mininet');
 
-			var p = new MininetCtrl("/tmp/my.json","", App.io);
+			var p = new MininetCtrl("/tmp/"+req.body.expid+".json","", App.io);
 			console.log("@@@@ size: "+App.explist.length);
 			App.explist.push(p);
 			//p.provaSshClient("pwd");

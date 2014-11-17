@@ -13,29 +13,31 @@ dreamer.TestBedCtrl = (function (global){
   	var sshclients = [];
   	var sh;
   	var depSocket;
+
   	
   	//var self = this;
 
 
   	function TestBedCtrl(topopath, expname, io){
   		console.log("TestBedCtrl exp: " + expname);
-  		this.topology = "wer";
+  		this.tpath = topopath;
   		if(topopath != undefined){
 	  		this.expname = expname;
 	  		this.ns = io.of('/'+expname);
-	  		setupWebSocketListener(this);
+	  		
 	  		var self = this;
 	  		myUtil.impJsonFromFile(topopath,function(data){
 	  			if(!data.error){
 
 	  				self.topology = data.data;
-
+	  				setupWebSocketListener(self);
+	  				self.setupNodeProp();
 	  			}
 	  			else{
 	  				self.topology = {};
 	  			}
 
-	  			self.setupNodeProp();
+	  			
 	  		});
   		
   			
@@ -46,7 +48,7 @@ dreamer.TestBedCtrl = (function (global){
 
   	TestBedCtrl.prototype.setupNodeProp = function(){
   		for(var n in this.topology.vertices){
-  			clientsp[n] = { username : "root", psw: "root"};
+  			clientsp[n] = { username : "root", psw: "root", address: ""};
   		}
   	};
 
@@ -70,29 +72,55 @@ dreamer.TestBedCtrl = (function (global){
 				    	})
 				    	.on('cmd', function(data){
 				    		console.log('deployment cmd ' + data.cmd);
-				    		if( data.cmd == "deploy")
-				    			sh.stdin.write("sudo python test/sshdtest.py"+ "\n");
+				    		if( data.cmd == "deploy"){
+				    			sh.stdin.write("cd /home/user/dreamer-mininet-extensions"+ "\n");
+								sh.stdin.write("sudo python ./mininet_deployer.py --topology "+self.tpath+ "\n");
+							}
 				    		else
 				    			sh.stdin.write(data.cmd+ "\n");
 				    	});
 		        	sh.stdout.on('data', function(data) {
 				        console.log('deploy: ' + data)
-				        if(data.indexOf("nodeaddr") == 0){
-				        	var spli = data.split(" ");
-				        	clientsp[spli[1]] = spli[2];
+				        if(data.indexOf("is running sshd at the following address") > 0){
+				        	var line = data.split("\n");
+				        	for(var l in line){
+				        		
+				        		if(line[l].indexOf("is running sshd at the following address") > 0){
+					       			var spli = line[l].split(" ");
+					        		if(clientsp[spli[1]])
+					        			clientsp[spli[1]].address = spli[9];
+					        		else
+					        			clientsp[spli[1]] = { username : "root", psw: "root", address: spli[9]};			       			
+				       			}
+
+				        	}
+
 				        }
 				        clientws[nodeid].emit('cmd_res', data);
 				    });
 				    sh.stderr.setEncoding('utf-8');
 				    sh.stderr.on('data', function(data) {
 				        console.log('dataerr-deploy: ' + data)
+				        if(data.indexOf("is running sshd at the following address") > 0){
+				        	var line = data.split("\n");
+				        	for(var l in line){
+				        		
+				        		if(line[l].indexOf("is running sshd at the following address") > 0){
+					       			var spli = line[l].split(" ");
+					        		if(clientsp[spli[1]])
+					        			clientsp[spli[1]].address = spli[9];
+					        		else
+					        			clientsp[spli[1]] = { username : "root", psw: "root", address: spli[9]};			       			
+				       			}
+
+				        	}
+
+				        }
 				        clientws[nodeid].emit('cmd_res', data);
 				    });
 		        }
 		    });
 
-  			
-  
 
 		   	socket.on('new-node-shell', function(data) {
 		   		var nodeid = data.nodeid;
@@ -100,11 +128,12 @@ dreamer.TestBedCtrl = (function (global){
 		        //if(data != undefined){
 		        	var SshClient = require('./sshClient');
 	        		var nodep = clientsp[nodeid];
-					var sshClient = new SshClient("root", "root", "10.0.0.2"); //TODO  dati da prelevare clientsp
+	        		console.log(nodep.username, nodep.psw, nodep.address); 
+					var sshClient = new SshClient(nodep.username, nodep.psw, nodep.address); 
 					sshclients[nodeid] = sshClient;
 					clientws[nodeid] = socket;
 		        	socket.join(nodeid)
-		        		.emit("cmd_res", "bravo join fatto!")
+		        		.emit("cmd_res", nodeid + " shell")
 						.on('disconnect', function(data) {
 				        	console.log('disconnesso ' + nodeid);
 				    	})
@@ -124,81 +153,10 @@ dreamer.TestBedCtrl = (function (global){
 
 		    });
 
-		   	/*
-		    socket.on('cmd', function(data) {
-		    	console.log("non room command");
-				if(data.nodeid =="deployment" && data.cmd == "deploy"){
-			  		console.log("DEPLOY");
-			  		sh = spawn("/bin/sh");
-			  		//console.log(socket);
-			  		//var selfie = this;
 
-				    sh.stdout.setEncoding('utf-8');
-				    sh.stdin.setEncoding('utf-8');
-				    sh.stdout.on('data', function(data) {
-				        console.log('deploy: ' + data)
-				        if(data.indexOf("nodeaddr") == 0){
-				        	var spli = data.split(" ");
-				        	clientsp[spli[1]] = spli[2];
-				        }
-				        socket.to("deployment").emit('cmd_res', data);
-				    });
-				    sh.stderr.setEncoding('utf-8');
-				    sh.stderr.on('data', function(data) {
-				        console.log('dataerr-deploy: ' + data)
-				        socket.to("deployment").emit('cmd_res', data);
-				    });
-
-				    sh.stdin.write("sudo python test/sshdtest.py"+ "\n");
-
-				}
-				else if(sh != undefined){
-					if(data.cmd == "Ctrl-C"){
-						console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-						//sh.kill('SIGINT');
-						sh.stdin.write("\x03");
-					}
-					else {
-						if(data.nodeid == "deployment")
-							sh.stdin.write(data.cmd+ "\n");
-					}
-				}
-		    });
-			*/
 		});
   	};
 
-  	/*TestBedCtrl.prototype.deploy= function(self){
-  		console.log("DEPLOY");
-  		sh = spawn("/bin/sh");
-  		console.log(self.depSocket);
-  		//var selfie = this;
-
-	    sh.stdout.setEncoding('utf-8');
-	    sh.stdin.setEncoding('utf-8');
-	    sh.stdout.on('data', function(data) {
-	        console.log('data-deploy: ' + data)
-	        this.depSocket.emit('cmd_res', data);
-	    });
-	    sh.stderr.setEncoding('utf-8');
-	    sh.stderr.on('data', function(data) {
-	        console.log('dataerr-deploy: ' + data)
-	        this.depSocket.emit('cmd_res', data);
-	    });
-
-	    sh.stdin.write("sudo python sshdtest.py"+ "\n");
-
-  	};*/
-
-
-  	TestBedCtrl.prototype.sendData = function(data){
-  		console.log('sendData: '+ data);
-
-  	};
-
-  	TestBedCtrl.prototype.rcvData = function(data){
-
-  	};
 
 
 
