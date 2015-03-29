@@ -2,6 +2,8 @@ if (typeof dreamer === 'undefined') {
   var dreamer = {};
 }
 var Util = require('../routes/util');
+var config = require('../config');
+
 
 dreamer.TestBedCtrl = (function (global){
   'use strict';
@@ -22,13 +24,13 @@ dreamer.TestBedCtrl = (function (global){
   		console.log("TestBedCtrl exp: " + expname);
   		this.tpath = topopath;
   		if(topopath != undefined){
-	  		this.expname = expname;
-	  		this.ns = io.of('/'+expname);
+	  		this.expname = (expname != undefined && expname.length > 0)? expname : "";
+	  		this.ns = io.of('/' + this.expname);
 	  		
 	  		var self = this;
 	  		myUtil.impJsonFromFile(topopath,function(data){
 	  			if(!data.error){
-
+	  				console.log("importJsonfromFile");
 	  				self.topology = data.data;
 	  				setupWebSocketListener(self);
 	  				self.setupNodeProp();
@@ -43,16 +45,16 @@ dreamer.TestBedCtrl = (function (global){
   			
   		}
 
-
   	}
 
   	TestBedCtrl.prototype.setupNodeProp = function(){
-  		for(var n in this.topology.vertices){
+  		for(var n in this.topology.vertices){ //TODO validi per mininet
   			clientsp[n] = { username : "root", psw: "root", address: ""};
   		}
   	};
 
   	function setupWebSocketListener(self){
+
   		self.ns.on('connection', function(socket){
   			console.log("Socket.io Event: connected " + socket.id);
 
@@ -73,7 +75,7 @@ dreamer.TestBedCtrl = (function (global){
 				    	.on('cmd', function(data){
 				    		console.log('deployment cmd ' + data.cmd);
 				    		if( data.cmd == "deploy"){
-				    			sh.stdin.write("cd /home/user/dreamer-mininet-extensions"+ "\n");
+				    			sh.stdin.write("cd " + config.mininet.mininet_extension_path+ "\n");
 								sh.stdin.write("sudo python ./mininet_deployer.py --topology "+self.tpath+ "\n");
 							}
 				    		else
