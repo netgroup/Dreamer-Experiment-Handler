@@ -17,8 +17,8 @@ Experiment-Handler controls emulated SDN testbeds from a web GUI. It uses the Mi
 
 If you’re new to Node.js development, you’ll need to set up a few things first:
 - Dreamer-Mininet-Extensions ([can be found here](https://github.com/netgroup/Dreamer-Mininet-Extensions))
-- Dreamer-Topology3D([can be found here](https://github.com/netgroup/Dreamer-Topology3D))
-- Node.js, easily installed on Mac, Windows, and Linux with packages from [nodejs.org](nodejs.org).
+- Dreamer-Topology3D ([can be found here](https://github.com/netgroup/Dreamer-Topology3D))
+- Node.js, easily installed on Mac, Windows, and Linux with packages from [nodejs.org](http://nodejs.org).
 - [Supervisor](https://github.com/isaacs/node-supervisor) (optional): is used to restart programs when they crash. 
 ```sh
 	 $ npm install supervisor -g
