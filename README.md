@@ -3,11 +3,13 @@
 Dreamer-Experiment-Handler
 ==================
 
-Experiment-Handler For Dreamer Project (GÉANT Open Call).
+Experiment-Handler is used for controlling emulated SDN testbeds from a web GUI. It is a part of the [Mantoo suite](https://github.com/netgroup/Dreamer-Mantoo), a result of the [DREAMER project](http://netgroup.uniroma2.it/DREAMER/). 
+
+Addtional documentation is available at http://netgroup.uniroma2.it/OSHI/ .
 
 Overview
 -----------
-I
+Experiment-Handler controls emulated SDN testbeds from a web GUI. It uses the Mininet emulator and provides the server side elements that allocates and controls Mininet nodes. It redirects Mininet nodes consoles towards a web client (Topology 3D).
 
 ---------------------------
 
