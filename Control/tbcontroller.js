@@ -82,7 +82,7 @@ dreamer.TestBedCtrl = (function (global){
 				    			sh.stdin.write(data.cmd+ "\n");
 				    	});
 		        	sh.stdout.on('data', function(data) {
-				        console.log('deploy: ' + data)
+				        console.log('deploy-data: ' + data)
 				        if(data.indexOf("is running sshd at the following address") > 0){
 				        	var line = data.split("\n");
 				        	for(var l in line){

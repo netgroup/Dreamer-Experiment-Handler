@@ -8,22 +8,23 @@ dreamer.SshClient = (function (global){
 
     var util = require("util");
     var events = require("events");
-    var self = this;
+    var self; //= this;
     var spawn = require('child_process').spawn;
 
   	function SshClient(username, psw, address){
       this.username = username;
       this.password = psw;
       this.address = address;
-
+      self = this;
   	}
 
     util.inherits(SshClient, events.EventEmitter);
 
 
   	SshClient.prototype.connect= function(){
+      var self = this;
       this.ssh = spawn('sshpass', ['-p' ,this.password, 'ssh', '-tt' , '-o' ,"StrictHostKeyChecking no" , this.username+'@'+this.address]);
-      self.ssh.on('error', function(data) {
+      this.ssh.on('error', function(data) {
         console.log('ssh error ' + data)
         self.disconnect();
       });
