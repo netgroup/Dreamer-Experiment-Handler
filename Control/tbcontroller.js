@@ -102,7 +102,7 @@ dreamer.TestBedCtrl = (function (global){
 				    });
 				    sh.stderr.setEncoding('utf-8');
 				    sh.stderr.on('data', function(data) {
-				        console.log('dataerr-deploy: ' + data)
+				        console.log('deploy-log : ' + data)
 				        if(data.indexOf("is running sshd at the following address") > 0){
 				        	var line = data.split("\n");
 				        	for(var l in line){
@@ -137,16 +137,18 @@ dreamer.TestBedCtrl = (function (global){
 		        	socket.join(nodeid)
 		        		.emit("cmd_res", nodeid + " shell")
 						.on('disconnect', function(data) {
-				        	console.log('disconnesso ' + nodeid);
+				        	console.log('[sshclient]', nodeid, "disconnected");
 				    	})
 				    	.on("cmd", function(data){
-    						console.log("room cmd: " + data.cmd);
+    						console.log("[sshclient] exec cmd: " + data.cmd, "on", nodeid);
     						sshClient.sendData(data.cmd);
 		        		});
-
     					sshClient.on("data", function(data){
-							console.log("sshclient data from: " + nodeid);
-							console.log(data);
+							console.log("[sshclient] data from " + nodeid, data);
+    						socket.emit('cmd_res', data);
+    					});
+    					sshClient.on("error", function(data){
+							console.log("[sshclient]: error from " + nodeid, data);
     						socket.emit('cmd_res', data);
     					});
     				sshClient.connect(); 

@@ -48,7 +48,7 @@ dreamer.SshClient = (function (global){
       
       
       self.ssh.stdout.on('data', function(data) {
-
+            console.log('ssh data ' + data);
             if (self.connected) {
                 return self.emit('data',data);
             }
@@ -72,8 +72,27 @@ dreamer.SshClient = (function (global){
       });
       self.ssh.stderr.setEncoding('utf-8');
       self.ssh.stderr.on('data', function(data) {
-        console.log('ssh dataerr ' + data)
-        self.emit('dataerr', data);
+        console.log('ssh dataerr ' + data);
+        if(data.toString().match("Could not resolve hostname")){
+                self.emit('error', {msg: 'noresolve', address: self.address});
+                self.ssh.kill();
+                return;
+        }// 
+        else if(data.toString().match("No route to host")){
+                self.emit('error', {msg: 'unreachable', address: self.address});
+                self.ssh.kill();
+                return;
+        }
+        else if(data.toString().match("Network is unreachable")){
+                self.emit('error', {msg: 'unreachable', address: self.address});
+                self.ssh.kill();
+                return;
+        }
+        else{
+            self.emit('dataerr', data);
+            self.ssh.kill();
+            return;
+        }
       });
       
     };
