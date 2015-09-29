@@ -28,16 +28,30 @@ dreamer.SshClient = (function (global){
         console.log('ssh error ' + data)
         self.disconnect();
       });
+      this.ssh.on('end', function(data) {
+        console.log('ssh end ' + data)
+       // self.disconnect();
+      });
 
       this.ssh.stdin.setEncoding('utf-8');
       this.ssh.stdout.setEncoding('utf-8');
       initListeners(this);
   	};
 
+    SshClient.prototype.setAddress= function(address){
+      this.address = address;
+    };
+
     SshClient.prototype.sendData= function(data){
       console.log("this.ssh.connected", this.ssh.connected);
       //if(this.ssh.connected == true)
+      try{
         this.ssh.stdin.write(data + "\n");
+      }
+      catch(e){
+        this.emit('error', {msg: 'notconnected', address: this.address});
+      }
+        
       //else
       //   this.emit('error', {msg: 'notconnected', address: this.address});
     };
