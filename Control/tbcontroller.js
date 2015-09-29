@@ -38,11 +38,7 @@ dreamer.TestBedCtrl = (function (global){
 	  			else{
 	  				self.topology = {};
 	  			}
-
-	  			
 	  		});
-  		
-  			
   		}
 
   	}
@@ -141,15 +137,18 @@ dreamer.TestBedCtrl = (function (global){
 				    	})
 				    	.on("cmd", function(data){
     						console.log("[sshclient] exec cmd: " + data.cmd, "on", nodeid);
-    						sshClient.sendData(data.cmd);
+    						if(data.cmd == "cmd_reconnect")
+    							sshClient.connect();
+    						else
+    							sshClient.sendData(data.cmd);
 		        		});
     					sshClient.on("data", function(data){
 							console.log("[sshclient] data from " + nodeid, data);
     						socket.emit('cmd_res', data);
     					});
     					sshClient.on("error", function(data){
-							console.log("[sshclient]: error from " + nodeid, data);
-    						socket.emit('cmd_res', data);
+							console.log("[sshclient] error from " + nodeid, data);
+    						socket.emit('error_res', data);
     					});
     				sshClient.connect(); 
 		        	

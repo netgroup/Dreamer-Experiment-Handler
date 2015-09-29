@@ -35,8 +35,11 @@ dreamer.SshClient = (function (global){
   	};
 
     SshClient.prototype.sendData= function(data){
-      
-      this.ssh.stdin.write(data + "\n");
+      console.log("this.ssh.connected", this.ssh.connected);
+      //if(this.ssh.connected == true)
+        this.ssh.stdin.write(data + "\n");
+      //else
+      //   this.emit('error', {msg: 'notconnected', address: this.address});
     };
 
     SshClient.prototype.disconnect= function(){
