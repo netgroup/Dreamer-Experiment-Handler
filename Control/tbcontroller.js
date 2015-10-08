@@ -139,7 +139,7 @@ dreamer.TestBedCtrl = (function (global){
     						console.log("[sshclient] exec cmd: " + data.cmd, "on", nodeid);
     						if(data.cmd == "cmd_reconnect"){
     							sshClient.setAddress(clientsp[nodeid].address);
-    							sshClient.connect();
+    							sshClient.connect();			
     						}else
     							sshClient.sendData(data.cmd);
 		        		});

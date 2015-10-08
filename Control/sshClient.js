@@ -23,7 +23,11 @@ dreamer.SshClient = (function (global){
 
   	SshClient.prototype.connect= function(){
       var self = this;
-      this.ssh = spawn('sshpass', ['-p' ,this.password, 'ssh', '-tt' , '-o' ,"StrictHostKeyChecking no" , this.username+'@'+this.address]);
+      this.ssh = spawn('sshpass', ['-p' ,this.password, 'ssh', '-tt' , '-o' ,"StrictHostKeyChecking no" , this.username+'@'+this.address], {env: {
+      TERM: 'xterm',
+      SHELL: '/bin/bash',
+      LANG: 'it_IT.UTF-8',
+    }});
       this.ssh.on('error', function(data) {
         console.log('ssh error ' + data)
         self.disconnect();
@@ -43,10 +47,9 @@ dreamer.SshClient = (function (global){
     };
 
     SshClient.prototype.sendData= function(data){
-      console.log("this.ssh.connected", this.ssh.connected);
-      //if(this.ssh.connected == true)
+      
       try{
-        this.ssh.stdin.write(data + "\n");
+        this.ssh.stdin.write(data + "\r\n");
       }
       catch(e){
         this.emit('error', {msg: 'notconnected', address: this.address});
