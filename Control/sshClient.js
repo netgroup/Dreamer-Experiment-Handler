@@ -108,6 +108,10 @@ dreamer.SshClient = (function (global){
                 self.ssh.kill();
                 return;
         }
+        else if(data.toString().match("to the list of known hosts")){
+
+            return;
+        }
         else{
             self.emit('dataerr', data);
             self.ssh.kill();
