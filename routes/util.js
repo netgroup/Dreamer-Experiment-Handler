@@ -4,8 +4,10 @@ if (typeof dreamer === 'undefined') {
 
 dreamer.Util = (function (global){
   'use strict';
+  	var DEBUG_LOG = "[Util]";
+
   	function Util(){
-  		console.log("UTILLLLL");
+  		console.log(DEBUG_LOG,"Builder");
   	}
 
   	Util.prototype.newJSONfile= function(outputFilename, data, callback){
@@ -24,10 +26,10 @@ dreamer.Util = (function (global){
 
   	Util.prototype.impJsonFromFile= function(inputFilename, callback){
 	  	var fs = require('fs');
-	  	console.log("impJsonFromFile", inputFilename);
+	  	console.log(DEBUG_LOG,"impJsonFromFile", inputFilename);
 	  	fs.readFile(inputFilename, 'utf8',function(err, data){
 	  		if(err){
-	  			console.log("impJsonFromFile", "error");
+	  			console.log(DEBUG_LOG,"impJsonFromFile", "error");
 	  			callback({error: {message:err}});
 	  		}
 	  		else{

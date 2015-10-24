@@ -2,9 +2,11 @@ if (typeof dreamer === 'undefined') {
   var dreamer = {};
 }
 
+//TODO da estendere 
 
 dreamer.MininetCtrl = (function (global){
   'use strict';
+    var DEBUG_LOG = "[MininetCtrl]";
     var TestBedCtrl = require('./tbcontroller');
     MininetCtrl.prototype = new TestBedCtrl();
     MininetCtrl.prototype.constructor = MininetCtrl;
@@ -13,8 +15,8 @@ dreamer.MininetCtrl = (function (global){
     
     
   	function MininetCtrl(topopath, expname, io){
-      console.log("topopath " + topopath);
-      console.log("expname " + expname);
+
+      console.log(DEBUG_LOG, "Builder" , expname, topopath);
       TestBedCtrl.call(this,topopath, expname, io);
        //this.parent.constructor.call(this,topopath, expname, io);
   	}

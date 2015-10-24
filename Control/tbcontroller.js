@@ -21,16 +21,17 @@ dreamer.TestBedCtrl = (function (global){
 
 
   	function TestBedCtrl(topopath, expname, io){
-  		console.log("TestBedCtrl exp: " + expname);
-  		this.tpath = topopath;
+  		
   		if(topopath != undefined){
+  			console.log("[TestBedCtrl]: expname: " + expname);
+  			this.tpath = topopath;
 	  		this.expname = (expname != undefined && expname.length > 0)? expname : "";
 	  		this.ns = io.of('/' + this.expname);
 	  		
 	  		var self = this;
 	  		myUtil.impJsonFromFile(topopath,function(data){
 	  			if(!data.error){
-	  				console.log("importJsonfromFile");
+	  				console.log("[TestBedCtrl]: topology JSON data loaded");
 	  				self.topology = data.data;
 	  				setupWebSocketListener(self);
 	  				self.setupNodeProp();
@@ -52,10 +53,10 @@ dreamer.TestBedCtrl = (function (global){
   	function setupWebSocketListener(self){
 
   		self.ns.on('connection', function(socket){
-  			console.log("Socket.io Event: connected " + socket.id);
+  			console.log("[TestBedCtrl]: Socket.io connection event " + socket.id);
 
   			socket.on('new-deploy-shell', function(data) {
-		        console.log('new-deploy-shell');
+		        console.log("[TestBedCtrl]: new-deploy-shell command received");
 		        
 		        var nodeid = data.nodeid;
 		        if(nodeid != undefined){
@@ -66,10 +67,10 @@ dreamer.TestBedCtrl = (function (global){
 		        	socket.join(nodeid)
 		        		.emit("cmd_res", "deployment shell allowed!")
 		        		.on('disconnect', function(data) {
-				        	console.log('disconnesso ' + nodeid);
+				        	console.log("[TestBedCtrl]: websocket deployment shell disconnected on nodeid: " + nodeid);
 				    	})
 				    	.on('cmd', function(data){
-				    		console.log('deployment cmd ' + data.cmd);
+				    		console.log("[TestBedCtrl]: deployment shell comman received: " + data.cmd);
 				    		if( data.cmd == "deploy"){
 				    			sh.stdin.write("cd " + config.mininet.mininet_extension_path+ "\n");
 								sh.stdin.write("sudo python ./mininet_deployer.py --topology "+self.tpath+ "\n");
@@ -78,7 +79,7 @@ dreamer.TestBedCtrl = (function (global){
 				    			sh.stdin.write(data.cmd+ "\n");
 				    	});
 		        	sh.stdout.on('data', function(data) {
-				        console.log('deploy-data: ' + data)
+				        console.log("[TestBedCtrl]::[deploy log]: " + data);
 				        if(data.indexOf("is running sshd at the following address") > 0){
 				        	var line = data.split("\n");
 				        	for(var l in line){
@@ -98,7 +99,7 @@ dreamer.TestBedCtrl = (function (global){
 				    });
 				    sh.stderr.setEncoding('utf-8');
 				    sh.stderr.on('data', function(data) {
-				        console.log('deploy-log : ' + data)
+				       console.log("[TestBedCtrl]::[deploy log]: " + data);
 				        if(data.indexOf("is running sshd at the following address") > 0){
 				        	var line = data.split("\n");
 				        	for(var l in line){
@@ -133,7 +134,7 @@ dreamer.TestBedCtrl = (function (global){
 		        	socket.join(nodeid)
 		        		.emit("cmd_res", nodeid + " shell")
 						.on('disconnect', function(data) {
-				        	console.log('[sshclient]', nodeid, "disconnected");
+				        	console.log("[TestBedCtrl]::[sshclient]", nodeid, "disconnected");
 				    	})
 				    	.on("cmd", function(data){
     						console.log("[sshclient] exec cmd: " + data.cmd, "on", nodeid);

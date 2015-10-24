@@ -5,7 +5,7 @@ if (typeof dreamer === 'undefined') {
 
 dreamer.SshClient = (function (global){
   'use strict';
-
+    var DEBUG_LOG = "[SshClient]";
     var util = require("util");
     var events = require("events");
     var self; //= this;
@@ -29,11 +29,11 @@ dreamer.SshClient = (function (global){
       LANG: 'it_IT.UTF-8',
     }});
       this.ssh.on('error', function(data) {
-        console.log('ssh error ' + data)
+        console.log(DEBUG_LOG,'ssh error ' + data);
         self.disconnect();
       });
       this.ssh.on('end', function(data) {
-        console.log('ssh end ' + data)
+       console.log(DEBUG_LOG,'ssh end ' + data)
        // self.disconnect();
       });
 
@@ -68,7 +68,7 @@ dreamer.SshClient = (function (global){
       
       
       self.ssh.stdout.on('data', function(data) {
-            console.log('ssh data ' + data);
+            console.log(DEBUG_LOG,'ssh data:', data);
             if (self.connected) {
                 return self.emit('data',data);
             }
@@ -92,7 +92,7 @@ dreamer.SshClient = (function (global){
       });
       self.ssh.stderr.setEncoding('utf-8');
       self.ssh.stderr.on('data', function(data) {
-        console.log('ssh dataerr ' + data);
+        console.log(DEBUG_LOG,'ssh dataerr:', data);
         if(data.toString().match("Could not resolve hostname")){
                 self.emit('error', {msg: 'noresolve', address: self.address});
                 self.ssh.kill();
