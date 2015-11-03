@@ -14,6 +14,7 @@ router.get('/', function(req, res) {
 });
 
 /* new experiment */
+
 router.post('/newExp', function(req, res) {
     console.log(DEBUG_LOG, "new request on /newExp");
     if (req.body.topology && req.body.expid) {
@@ -24,14 +25,15 @@ router.post('/newExp', function(req, res) {
             var p = new MininetCtrl("/tmp/" + req.body.expid + ".json", req.body.expid, App.io);
             //console.log("@@@@ size: " + App.explist.length);
             App.explist.push(p);
-        	res.status(200).send({
-                response: "ok"
-            });
+
+            res.header("Access-Control-Allow-Origin", "*");
+            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type,    Accept");
+            res.json({"data":'all good'},200);
+
         });
     };
 
 });
-
 
 
 module.exports = router;
