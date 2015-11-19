@@ -71,9 +71,16 @@ dreamer.TestBedCtrl = (function (global){
 				    	})
 				    	.on('cmd', function(data){
 				    		console.log("[TestBedCtrl]: deployment shell comman received: " + data.cmd);
-				    		if( data.cmd == "deploy"){
+				    		if(data.cmd == "deploy"){
 				    			sh.stdin.write("cd " + config.mininet.mininet_extension_path+ "\n");
 								sh.stdin.write("sudo python ./mininet_deployer.py --topology "+self.tpath+ "\n");
+							}else if(data.cmd == "info_nodes"){
+								var myutil = new Util();
+						        myutil.impJsonFromFile("/tmp/overall_info.json", function(response) {
+						        	console.log("callback impJsonFromFile");
+									clientws[nodeid].emit('info_nodes', JSON.stringify(response.data));
+
+						        });
 							}
 				    		else
 				    			sh.stdin.write(data.cmd+ "\n");
