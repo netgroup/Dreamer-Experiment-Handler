@@ -44,6 +44,14 @@ dreamer.TestBedCtrl = (function (global){
 
   	}
 
+  	function getNodesInfo(nodeid){
+  		var myutil = new Util();
+		myutil.impJsonFromFile("/tmp/overall_info.json", function(response) {
+		   	console.log("callback impJsonFromFile");
+			clientws[nodeid].emit('info_nodes', JSON.stringify(response.data));
+		});
+  	}
+
   	TestBedCtrl.prototype.setupNodeProp = function(){
   		for(var n in this.topology.vertices){ //TODO validi per mininet
   			clientsp[n] = { username : "root", psw: "root", address: ""};
@@ -75,12 +83,7 @@ dreamer.TestBedCtrl = (function (global){
 				    			sh.stdin.write("cd " + config.mininet.mininet_extension_path+ "\n");
 								sh.stdin.write("sudo python ./mininet_deployer.py --topology "+self.tpath+ "\n");
 							}else if(data.cmd == "info_nodes"){
-								var myutil = new Util();
-						        myutil.impJsonFromFile("/tmp/overall_info.json", function(response) {
-						        	console.log("callback impJsonFromFile");
-									clientws[nodeid].emit('info_nodes', JSON.stringify(response.data));
-
-						        });
+								getNodesInfo(nodeid);
 							}
 				    		else
 				    			sh.stdin.write(data.cmd+ "\n");
@@ -97,6 +100,9 @@ dreamer.TestBedCtrl = (function (global){
 					        			clientsp[spli[1]].address = spli[9];
 					        		else
 					        			clientsp[spli[1]] = { username : "root", psw: "root", address: spli[9]};			       			
+				       			}
+				       			else if(line[l].indexOf("Starting CLI") > 0){
+				       				getNodesInfo(nodeid);
 				       			}
 
 				        	}
@@ -118,7 +124,9 @@ dreamer.TestBedCtrl = (function (global){
 					        		else
 					        			clientsp[spli[1]] = { username : "root", psw: "root", address: spli[9]};			       			
 				       			}
-
+				       			else if(line[l].indexOf("Starting CLI") > 0){
+				       				getNodesInfo(nodeid);
+				       			}
 				        	}
 
 				        }

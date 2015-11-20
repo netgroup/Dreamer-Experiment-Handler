@@ -24,7 +24,7 @@ dreamer.Util = (function (global){
 
   	};
 
-  	Util.prototype.impJsonFromFile= function(inputFilename, callback){
+  	Util.prototype.impJsonFromFile = function(inputFilename, callback){
 	  	var fs = require('fs');
 	  	console.log(DEBUG_LOG,"impJsonFromFile", inputFilename);
 	  	fs.readFile(inputFilename, 'utf8',function(err, data){
